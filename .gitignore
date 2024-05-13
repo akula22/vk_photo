@@ -46,3 +46,4 @@ app.*.map.json
 /windows/
 .metadata
 pubspec.lock
+/conf/conf.dart

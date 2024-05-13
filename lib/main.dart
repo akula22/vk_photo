@@ -21,7 +21,7 @@ void main() async {
   });
   // runApp(const ProviderScope(child: PhotoApp())); //  riverpod
     runApp(const PhotoApp()); //  bloc
-
+  //nout test
 }
 
 class PhotoApp extends StatelessWidget {

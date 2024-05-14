@@ -29,7 +29,7 @@ class PhotoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var q = Repository.fetchGroups();
+    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),

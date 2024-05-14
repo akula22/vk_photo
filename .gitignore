@@ -47,3 +47,4 @@ app.*.map.json
 .metadata
 pubspec.lock
 /lib/conf/conf.dart
+pubspec.lock

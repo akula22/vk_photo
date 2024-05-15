@@ -6,9 +6,11 @@ class Group {
 
   Group({this.title, this.domain, this.id});
 
-  Group.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    domain = json['domain'];
-    id = json['id'];
+  factory Group.fromJson(Map<String, dynamic> json) {
+    return Group(
+      title: json['title'],
+      domain: json['domain'],
+      id: json['id'],
+    );
   }
 }

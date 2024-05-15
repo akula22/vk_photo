@@ -4,3 +4,9 @@ part of 'photo_bloc.dart';
 sealed class PhotoState {}
 
 final class PhotoInitial extends PhotoState {}
+
+final class GroupState extends PhotoState {
+  final List<Group> groups;
+
+  GroupState({this.groups = const []});
+}

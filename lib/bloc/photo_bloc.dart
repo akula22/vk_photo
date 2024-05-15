@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:vk_photo_new/models/Photo.dart';
 import 'package:vk_photo_new/repository/repository.dart';
 
 import '../models/Group.dart';
@@ -15,6 +16,8 @@ class PhotoBloc extends Bloc<GroupEvent, GroupState> {
       final groups = await _groupsRepository.fetchGroups();
        emit(GroupState(groups: groups));
     });
+
+    
   }
 
   late final Repository _groupsRepository;

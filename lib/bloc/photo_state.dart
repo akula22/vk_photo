@@ -7,6 +7,9 @@ final class PhotoInitial extends PhotoState {}
 
 final class GroupState extends PhotoState {
   final List<Group> groups;
+  final List<Photo> photos;
 
-  GroupState({this.groups = const []});
+  GroupState({this.groups = const [], this.photos = const []});
 }
+
+class GroupLoaded extends PhotoState {}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_photo_new/bloc/photo_bloc.dart';
 import 'package:vk_photo_new/repository/repository.dart';
@@ -8,13 +9,19 @@ class BlocPhotoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groups = BlocListener(listener:(context, state) => state);
+    final groups = context.select((PhotoBloc bloc) => bloc.state.groups);
     return Scaffold(
-      body: ListView.builder(
-        itemCount: groups.length,
-        itemBuilder: (context, index) {
-          return const Text('123');
-        },
+      body: Column(
+        children: [
+          Expanded(child: FloatingActionButton(onPressed:() =>  context.read<PhotoBloc>().add(GroupEvent()))),
+          Expanded(
+          child: ListView.builder(
+            itemCount: groups.length,
+            itemBuilder: (context, index) {
+              return  Text(groups[index].title ?? '');
+            },
+          ),
+        )],
       ),
     );
   }

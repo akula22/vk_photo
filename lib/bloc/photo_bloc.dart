@@ -14,10 +14,13 @@ class PhotoBloc extends Bloc<GroupEvent, GroupState> {
         super(GroupState()) {
     on<GroupEvent>((GroupEvent event, Emitter<GroupState> emit) async {
       final groups = await _groupsRepository.fetchGroups();
-       emit(GroupState(groups: groups));
+      //
+      for (var group in groups) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        var res = await Repository().fetchPhotos(group.domain ?? '');
+      }
+      emit(GroupState(groups: groups));
     });
-
-    
   }
 
   late final Repository _groupsRepository;

@@ -17,7 +17,7 @@ class Repository {
         return [];
       }
     } catch (e) {
-      print(e.toString());
+      print("Ошибка: ${e.toString()}");
       return [];
     }
   }
@@ -39,7 +39,7 @@ class Repository {
         ));
          await Future<void>.delayed(const Duration(milliseconds: 500));
      if (response.statusCode == 200) {
-       final data = Photo.fromJson(response.data['response']);
+       final data = Item.fromJson(response.data['response']);
  
        data.items?.forEach((element) {
          if (element.markedAsAds == 0) {
@@ -53,7 +53,7 @@ class Repository {
                     "${vktime.day}-${vktime.month}_${vktime.hour}-${vktime.minute}";
   
                 if (vktime.isAfter(yesterday)) {
- 4                pics.add({
+                 pics.add({
                     'url': attachments.photo?.sizes?.last.url,
                     'date': shortDate
                   });

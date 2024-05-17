@@ -6,10 +6,10 @@ sealed class PhotoState {}
 final class PhotoInitial extends PhotoState {}
 
 final class GroupState extends PhotoState {
-  final List<Group> groups;
-  final List<Photo> photos;
+  final List<ModelView> data;
+  
 
-  GroupState({this.groups = const [], this.photos = const []});
+  GroupState({this.data = const []});
 }
 
 class GroupLoaded extends PhotoState {}

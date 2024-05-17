@@ -2,15 +2,15 @@
 class Group {
   String? title;
   String? domain;
-  String? id;
+  // int? id;
 
-  Group({this.title, this.domain, this.id});
+  Group({this.title, this.domain});
 
   factory Group.fromJson(Map<String, dynamic> json) {
     return Group(
       title: json['title'],
       domain: json['domain'],
-      id: json['id'],
+      // id: json['id'],
     );
   }
 }

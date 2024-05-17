@@ -9,7 +9,8 @@ class BlocPhotoView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groups = context.select((PhotoBloc bloc) => bloc.state.groups);
+    
+    final data = context.select((PhotoBloc bloc) => bloc.state.data);
     return Scaffold(
       backgroundColor: Colors.grey.shade900,
       appBar: AppBar(
@@ -47,7 +48,7 @@ class BlocPhotoView extends StatelessWidget {
               slivers: [
                 const SliverToBoxAdapter(child: SizedBox(height: 14)),
                 SliverList.builder(
-                  itemCount: groups.length,
+                  itemCount: data.length,
                   itemBuilder: (context, index) {
                    
                     return Container(
@@ -71,14 +72,14 @@ class BlocPhotoView extends StatelessWidget {
                                   // _launchInBrowser(_url);
                                 },
                                 child: Text(
-                                  groups[index].title ?? '',
+                                  data[index].title,
                                   style: const TextStyle(
                                       decoration: TextDecoration.underline),
                                 )),
                           ),
                           Expanded(
                               flex: 1,
-                              child: Text('col_photo')),
+                              child: Text(data[index].colPhotoDomain.toString())),
                           Expanded(
                             flex: 10,
                             child: FAProgressBar(

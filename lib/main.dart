@@ -4,11 +4,11 @@ import 'package:vk_photo_new/bloc/photo_bloc.dart';
 import 'package:vk_photo_new/views/bloc_photo_view2.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'repository/repository.dart';
-import 'views/bloc_photo_view.dart';
 // import 'photo/views/photo_view.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main() async {
+  
   //win manager resize
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();

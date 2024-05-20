@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_photo_new/models/ModelView.dart';
@@ -25,7 +27,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
           // запрос в вк
           var res = await Repository().fetchPhotos(group.domain ?? '');
           int colPhotoDomain = res.length;
-          int timeAnimation = colPhotoDomain * 100;
+          int timeAnimation = colPhotoDomain * 200;
 
           // формируем данные для вьюхи
           data.add(ModelView(
@@ -33,6 +35,9 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
               domain: group.domain ?? 'none',
               colPhotoDomain: colPhotoDomain,
               timeAnimation: timeAnimation));
+
+              //  save photo
+              photoSave();
 
           emit(PhotoLoaded(data: data));
         }
@@ -42,4 +47,17 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
       }
     });
   }
+}
+
+
+
+void photoSave() async {
+  String os = Platform.operatingSystem; //in your code]
+  final String filePath;
+  //  Если на винде
+  if (os == 'windows') {
+     filePath = '';
+  } else if (os == 'linux') {
+    filePath = '/home/akula22/Pictures';
+  } 
 }

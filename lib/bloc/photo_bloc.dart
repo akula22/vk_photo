@@ -1,69 +1,45 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_photo_new/models/ModelView.dart';
-import 'package:vk_photo_new/models/Photo.dart';
 import 'package:vk_photo_new/repository/repository.dart';
-
-import '../models/Group.dart';
 
 part 'photo_event.dart';
 part 'photo_state.dart';
 
-class PhotoBloc extends Bloc<GroupEvent, GroupState> {
-  PhotoBloc({required Repository groupsRepository})
-      : _groupsRepository = groupsRepository,
-        super(GroupState()) {
-         
+class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
+  final Repository groupsRepository;
+  PhotoBloc({required this.groupsRepository}) : super(PhotoInitial()) {
     // ignore: void_checks
-    on<GroupEvent>((GroupEvent event, Emitter<GroupState> emit) async* {
+    on<LoadPhoto>(( event, emit) async {
+      //  показываем загрузку
+      emit(PhotoLoading());
+
       List<ModelView> data = [];
-      final groups = await _groupsRepository.fetchGroups();
-      for (var group in groups) {
-        print(group.domain);
-        await Future.delayed(const Duration(milliseconds: 500));
 
-        // запрос в вк
-        var res = await Repository().fetchPhotos(group.domain ?? '');
-        int colPhotoDomain = res.length;
-        int timeAnimation = colPhotoDomain * 100;
+      try {
+        final groups = await groupsRepository.fetchGroups();
+        for (var group in groups) {
+          print(group.domain);
+          await Future.delayed(const Duration(milliseconds: 500));
 
-        // формируем данные для вьюхи
-        data.add(ModelView(
-            title: group.title ?? 'none',
-            domain: group.domain ?? 'none',
-            colPhotoDomain: colPhotoDomain,
-            timeAnimation: timeAnimation));
-            yield GroupState(data: data);
-        // emit(GroupState(data: data));
+          // запрос в вк
+          var res = await Repository().fetchPhotos(group.domain ?? '');
+          int colPhotoDomain = res.length;
+          int timeAnimation = colPhotoDomain * 100;
+
+          // формируем данные для вьюхи
+          data.add(ModelView(
+              title: group.title ?? 'none',
+              domain: group.domain ?? 'none',
+              colPhotoDomain: colPhotoDomain,
+              timeAnimation: timeAnimation));
+
+          emit(PhotoLoaded(data: data));
+        }
+         emit(PhotoLoaded(data: data));
+      } catch (error) {
+        emit(PhotoError(error.toString()));
       }
     });
   }
-
-  // Stream<GroupState> mapEventToState(GroupEvent event) async* {
-  //   List<ModelView> data = [];
-  //   final groups = await _groupsRepository.fetchGroups();
-  //   for (var group in groups) {
-  //     await Future.delayed(const Duration(milliseconds: 500));
-
-  //     // запрос в вк
-  //     var res = await Repository().fetchPhotos(group.domain ?? '');
-  //     int colPhotoDomain = res.length;
-  //     int timeAnimation = colPhotoDomain * 100;
-
-  //     //  формируем данные для вьюхи
-  //     data.add(ModelView(
-  //         title: group.title ?? 'none',
-  //         domain: group.domain ?? 'none',
-  //         colPhotoDomain: colPhotoDomain,
-  //         timeAnimation: timeAnimation));
-  //     yield GroupState(data: data);
-  //   }
-  // }
-
-  late final Repository _groupsRepository;
-
-  // _onLoadGroups(GroupEvent event, Emitter<GroupState> emit) async {
-  //   final groups = await _groupsRepository.fetchGroups();
-  //   emit(GroupState(groups: groups));
-  // }
 }

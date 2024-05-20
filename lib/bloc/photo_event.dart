@@ -1,5 +1,8 @@
 part of 'photo_bloc.dart';
 
-class PhotoEvent {}
+@immutable
+sealed class PhotoEvent {}
+ 
 
-class GroupEvent {}
+class LoadPhoto extends PhotoEvent {}
+

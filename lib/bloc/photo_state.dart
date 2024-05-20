@@ -5,11 +5,15 @@ sealed class PhotoState {}
 
 final class PhotoInitial extends PhotoState {}
 
-final class GroupState extends PhotoState {
-  final List<ModelView> data;
-  
+class PhotoLoading extends PhotoState {}
 
-  GroupState({this.data = const []});
+class PhotoLoaded extends PhotoState {
+  final List<ModelView> data;
+
+  PhotoLoaded({required this.data});
 }
 
-class GroupLoaded extends PhotoState {}
+class PhotoError extends PhotoState {
+  final String error;
+  PhotoError(this.error);
+}

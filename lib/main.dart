@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_photo_new/bloc/photo_bloc.dart';
+import 'package:vk_photo_new/views/bloc_photo_view2.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'repository/repository.dart';
 import 'views/bloc_photo_view.dart';
@@ -43,7 +44,7 @@ class PhotoApp extends StatelessWidget {
           // home: GetxPhotoView(),
         
           // home: const PhotoView(), /* riverpod */
-          home: const BlocPhotoView(),
+          home: const BlocPhotoView2(),
         ),
       ),
     );

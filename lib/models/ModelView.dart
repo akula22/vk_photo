@@ -5,10 +5,12 @@ class ModelView {
   String domain;
   int colPhotoDomain;
   int timeAnimation;
+  int totalPhotos;
   ModelView({
     required this.title,
     required this.domain,
     required this.colPhotoDomain,
     required this.timeAnimation,
+    required this.totalPhotos
   });
 }

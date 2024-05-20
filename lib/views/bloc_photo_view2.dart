@@ -3,6 +3,7 @@ import 'package:flutter_animation_progress_bar/flutter_animation_progress_bar.da
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vk_photo_new/bloc/photo_bloc.dart';
 import 'package:vk_photo_new/repository/repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BlocPhotoView2 extends StatelessWidget {
   const BlocPhotoView2({super.key});
@@ -10,6 +11,7 @@ class BlocPhotoView2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final data = context.select((PhotoBloc bloc) => bloc.state.data);
+
     return BlocProvider(
       create: (context) =>
           PhotoBloc(groupsRepository: Repository())..add(LoadPhoto()),
@@ -19,15 +21,15 @@ class BlocPhotoView2 extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-               IconButton(
+              IconButton(
                   hoverColor: const Color.fromARGB(121, 197, 10, 10),
-                  onPressed:() => PhotoBloc(groupsRepository: Repository())..add(LoadPhoto()),
+                  onPressed: () => PhotoBloc(groupsRepository: Repository())
+                    ..add(LoadPhoto()),
                   icon: const Icon(
-                     Icons.touch_app,
+                    Icons.touch_app,
                     color: Colors.yellowAccent,
                     size: 36,
                   )),
-
               const Text(
                 'VK ',
                 style: TextStyle(
@@ -41,6 +43,7 @@ class BlocPhotoView2 extends StatelessWidget {
                     color: Colors.deepOrangeAccent,
                     fontWeight: FontWeight.bold),
               ),
+              const SizedBox(width: 20),
             ],
           ),
         ),
@@ -65,14 +68,24 @@ class BlocPhotoView2 extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+                        if (index == 0)
+                          Stack(children: [
+                           
+                            Padding(
+                              padding: const EdgeInsets.only(left: 393, top: 0),
+                              child: Text('Всего фоток: ${data[index].totalPhotos}',
+                                  style: const TextStyle(
+                                      fontSize: 18, color: Colors.amber)),
+                            ),
+                          ]),
                         Expanded(
                           flex: 2,
                           child: GestureDetector(
-                              // onTap: () {
-                              //   final Uri _url = Uri.parse(
-                              //       'https://vk.com/${groups[index].domain}');
-                              //   _launchInBrowser(_url);
-                              // },
+                              onTap: () {
+                                final Uri url = Uri.parse(
+                                    'https://vk.com/${data[index].domain}');
+                                _launchInBrowser(url);
+                              },
                               child: Text(
                                 data[index].title,
                                 style: const TextStyle(
@@ -90,7 +103,8 @@ class BlocPhotoView2 extends StatelessWidget {
                             // displayText: '%',
                             size: 10,
                             progressColor: Colors.green.shade500,
-                            animatedDuration: Duration(milliseconds: data[index].timeAnimation),
+                            animatedDuration: Duration(
+                                milliseconds: data[index].timeAnimation),
                             borderRadius: BorderRadius.circular(5),
                             backgroundColor: Colors.grey.shade800,
                             // displayTextStyle: const TextStyle(fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
@@ -113,17 +127,17 @@ class BlocPhotoView2 extends StatelessWidget {
   }
 }
 
-// Future<void> _launchInBrowser(Uri url) async {
-//   if (!await launchUrl(
-//     url,
-//     mode: LaunchMode.externalApplication,
-//   )) {
-//     throw Exception('Could not launch $url');
-//   }
-// }
+Future<void> _launchInBrowser(Uri url) async {
+  if (!await launchUrl(
+    url,
+    mode: LaunchMode.externalApplication,
+  )) {
+    throw Exception('Could not launch $url');
+  }
+}
 
-// Future<void> launchUrlStart({required String url}) async {
-//   if (!await launchUrl(Uri.parse(url))) {
-//     throw 'Could not launch $url';
-//   }
-// }
+Future<void> launchUrlStart({required String url}) async {
+  if (!await launchUrl(Uri.parse(url))) {
+    throw 'Could not launch $url';
+  }
+}

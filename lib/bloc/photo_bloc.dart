@@ -14,34 +14,37 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
 
   PhotoBloc({required this.groupsRepository}) : super(PhotoInitial()) {
     // ignore: void_checks
-   
+
     on<LoadPhoto>((event, emit) async {
       //  показываем загрузку
       emit(PhotoLoading());
 
       List<ModelView> data = [];
       int totalPhotos = 0;
+      bool finish = false;
 
       try {
         final groups = await groupsRepository.fetchGroups();
         for (var group in groups) {
-          print(group.domain);
           await Future.delayed(const Duration(milliseconds: 500));
 
           // запрос в вк
           var res = await Repository().fetchPhotos(group.domain ?? '');
           int colPhotoDomain = res.length;
           int timeAnimation = colPhotoDomain * 200;
-          totalPhotos = totalPhotos + (colPhotoDomain-1);
+          totalPhotos = totalPhotos + (colPhotoDomain - 1);
 
-      
-          // формируем данные для вьюхи
-          data.add(ModelView(
-              title: group.title ?? 'none',
-              domain: group.domain ?? 'none',
-              colPhotoDomain: colPhotoDomain - 1,
-              totalPhotos: totalPhotos,
-              timeAnimation: timeAnimation));
+          // // формируем данные для вьюхи
+          // data.add(
+          //   ModelView(
+          //     title: group.title ?? 'none',
+          //     domain: group.domain ?? 'none',
+          //     colPhotoDomain: colPhotoDomain - 1,
+          //     totalPhotos: totalPhotos,
+          //     timeAnimation: timeAnimation,
+          //     finish: finish,
+          //   ),
+          // );
 
           int num = 0;
           for (var el in res) {
@@ -53,19 +56,30 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
             if (url != null) {
               // photoSave(url, group.domain ?? 'none', date, num);
             }
+            if (groups.last == group && colPhotoDomain == num) {
+              finish = true;
+            } else {
+              finish = false;
+            }
           }
-
+          data.add(
+            ModelView(
+              title: group.title ?? 'none',
+              domain: group.domain ?? 'none',
+              colPhotoDomain: colPhotoDomain - 1,
+              totalPhotos: totalPhotos,
+              timeAnimation: timeAnimation,
+              finish: finish,
+            ),
+          );
           emit(PhotoLoaded(data: data));
         }
-        emit(PhotoLoaded(data: data));
+        // emit(PhotoLoaded(data: data));
       } catch (error) {
         emit(PhotoError(error.toString()));
       }
-      
     });
-    
   }
- 
 }
 
 void photoSave(url, domain, date, num) async {

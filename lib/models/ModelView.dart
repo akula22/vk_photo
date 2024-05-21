@@ -6,11 +6,12 @@ class ModelView {
   int colPhotoDomain;
   int timeAnimation;
   int totalPhotos;
-  ModelView({
-    required this.title,
-    required this.domain,
-    required this.colPhotoDomain,
-    required this.timeAnimation,
-    required this.totalPhotos
-  });
+  bool finish = false;
+  ModelView(
+      {required this.title,
+      required this.domain,
+      required this.colPhotoDomain,
+      required this.timeAnimation,
+      required this.totalPhotos,
+      required this.finish});
 }

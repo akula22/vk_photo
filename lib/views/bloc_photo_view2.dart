@@ -11,11 +11,12 @@ class BlocPhotoView2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // final data = context.select((PhotoBloc bloc) => bloc.state.data);
-
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return BlocProvider(
       create: (context) =>
           PhotoBloc(groupsRepository: Repository())..add(LoadPhoto()),
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.grey.shade900,
         appBar: AppBar(
           title: Row(
@@ -53,69 +54,73 @@ class BlocPhotoView2 extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (state is PhotoLoaded) {
               final data = state.data;
-              return ListView.builder(
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 16)
-                        .copyWith(bottom: 5),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                    decoration: BoxDecoration(
-                        color: Colors.black26,
-                        borderRadius: BorderRadius.circular(6)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        if (index == 0)
-                          Stack(children: [
-                           
-                            Padding(
-                              padding: const EdgeInsets.only(left: 393, top: 0),
-                              child: Text('Всего фоток: ${data[index].totalPhotos}',
-                                  style: const TextStyle(
-                                      fontSize: 18, color: Colors.amber)),
+              return Column(children: [
+                Text('Всего фоток: ${data.last.totalPhotos}',
+                    style: const TextStyle(fontSize: 18, color: Colors.amber)),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      print("$index = ${data.length - 1}");
+                      if ((data.length - 1) == index) {
+                        WidgetsBinding.instance.addPostFrameCallback(
+                            (_) => _showSnackBar(context));
+                      }
+
+                      return Container(
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 16)
+                            .copyWith(bottom: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 6),
+                        decoration: BoxDecoration(
+                            color: Colors.black26,
+                            borderRadius: BorderRadius.circular(6)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: GestureDetector(
+                                  onTap: () {
+                                    final Uri url = Uri.parse(
+                                        'https://vk.com/${data[index].domain}');
+                                    _launchInBrowser(url);
+                                  },
+                                  child: Text(
+                                    data[index].title,
+                                    style: const TextStyle(
+                                        decoration: TextDecoration.underline),
+                                  )),
                             ),
-                          ]),
-                        Expanded(
-                          flex: 2,
-                          child: GestureDetector(
-                              onTap: () {
-                                final Uri url = Uri.parse(
-                                    'https://vk.com/${data[index].domain}');
-                                _launchInBrowser(url);
-                              },
-                              child: Text(
-                                data[index].title,
-                                style: const TextStyle(
-                                    decoration: TextDecoration.underline),
-                              )),
+                            Expanded(
+                                flex: 1,
+                                child: Text(
+                                    data[index].colPhotoDomain.toString())),
+                            Expanded(
+                              flex: 10,
+                              child: FAProgressBar(
+                                currentValue:
+                                    data[index].colPhotoDomain.toDouble(),
+                                maxValue: 30,
+                                // displayText: '%',
+                                size: 10,
+                                progressColor: Colors.green.shade500,
+                                animatedDuration: Duration(
+                                    milliseconds: data[index].timeAnimation),
+                                borderRadius: BorderRadius.circular(5),
+                                backgroundColor: Colors.grey.shade800,
+                                // displayTextStyle: const TextStyle(fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
+                                // changeColorValue: 50,
+                              ),
+                            ),
+                          ],
                         ),
-                        Expanded(
-                            flex: 1,
-                            child: Text(data[index].colPhotoDomain.toString())),
-                        Expanded(
-                          flex: 10,
-                          child: FAProgressBar(
-                            currentValue: data[index].colPhotoDomain.toDouble(),
-                            maxValue: 30,
-                            // displayText: '%',
-                            size: 10,
-                            progressColor: Colors.green.shade500,
-                            animatedDuration: Duration(
-                                milliseconds: data[index].timeAnimation),
-                            borderRadius: BorderRadius.circular(5),
-                            backgroundColor: Colors.grey.shade800,
-                            // displayTextStyle: const TextStyle(fontSize: 8, color: Colors.white, fontWeight: FontWeight.bold),
-                            // changeColorValue: 50,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
+                      );
+                    },
+                  ),
+                ),
+              ]);
             } else if (state is PhotoError) {
               return Text(state.error);
             }
@@ -123,6 +128,22 @@ class BlocPhotoView2 extends StatelessWidget {
           },
         ),
       ),
+    );
+  }
+
+  void _showSnackBar(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return const Wrap(
+          children: [
+            ListTile(
+              leading: Icon(Icons.stop),
+              title: Center(child: Text("finish")),
+            ),
+          ],
+        );
+      },
     );
   }
 }

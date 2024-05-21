@@ -32,7 +32,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
           var res = await Repository().fetchPhotos(group.domain ?? '');
           int colPhotoDomain = res.length;
           int timeAnimation = colPhotoDomain * 200;
-          totalPhotos = totalPhotos + colPhotoDomain;
+          totalPhotos = totalPhotos + (colPhotoDomain-1);
 
       
           // формируем данные для вьюхи
@@ -51,7 +51,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
             num++;
 
             if (url != null) {
-              photoSave(url, group.domain ?? 'none', date, num);
+              // photoSave(url, group.domain ?? 'none', date, num);
             }
           }
 

@@ -88,7 +88,7 @@ class BlocPhotoView2 extends StatelessWidget {
         return Wrap(
           children: [
             ListTile(
-              leading: Icon(Icons.stop),
+              leading: const Icon(Icons.stop),
               title: Center(child: Text("Финиш, фоток всего: $totalPhotos")),
             ),
           ],

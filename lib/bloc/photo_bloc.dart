@@ -54,7 +54,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
             num++;
 
             if (url != null) {
-              // photoSave(url, group.domain ?? 'none', date, num);
+             photoSave(url, group.domain ?? 'none', date, num);
             }
             if (groups.last == group && colPhotoDomain == num) {
               finish = true;
